@@ -39,12 +39,18 @@ public class LoginPage {
     }
 
     public String getSuccessMessage() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage));
         return driver.findElement(successMessage).getText();
     }
 
+
     public String getErrorMessage() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
         return driver.findElement(errorMessage).getText();
     }
+
 
     public boolean isErrorMessageDisplayed() {
         try {
@@ -56,4 +62,6 @@ public class LoginPage {
             return false;
         }
     }
+
+
 }

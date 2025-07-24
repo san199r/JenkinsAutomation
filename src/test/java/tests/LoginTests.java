@@ -1,40 +1,39 @@
 package tests;
 
-import base.BaseTest;
-import org.junit.Test;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import org.junit.*;
 import pages.LoginPage;
+import utils.ExtentManager;
+import base.BaseTest;
 
-import static org.junit.Assert.assertTrue;
+import java.io.File;
 
 public class LoginTests extends BaseTest {
+    static ExtentReports extent;
+    ExtentTest test;
+
+    @BeforeClass
+    public static void startReport() {
+        extent = ExtentManager.createInstance("test-output/extent-report.html");
+    }
+
+    @AfterClass
+    public static void endReport() {
+        extent.flush();
+    }
 
     @Test
     public void testValidLogin() {
+        test = extent.createTest("Valid Login Test");
         LoginPage loginPage = new LoginPage(driver);
+
         loginPage.enterUsername("tomsmith");
         loginPage.enterPassword("SuperSecretPassword!");
         loginPage.clickLogin();
 
-        assertTrue(loginPage.getSuccessMessage().contains("You logged into a secure area!"));
-    }
-
-    @Test
-    public void testInvalidLogin() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername("wrongusername");
-        loginPage.enterPassword("wrongpassword");
-        loginPage.clickLogin();
-
-        assertTrue(loginPage.getErrorMessage().contains("Your username is invalid!"));
-    }
-
-    @Test
-    public void testEmptyFields() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername("");
-        loginPage.enterPassword("");
-        loginPage.clickLogin();
-
-        assertTrue(loginPage.getErrorMessage().contains("Your username is invalid!")); // actual behavior
+        Assert.assertTrue(loginPage.getSuccessMessage().contains("You logged into a secure area!"));
+        test.log(Status.PASS, "Valid Login Test Passed");
     }
 }

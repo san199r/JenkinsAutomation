@@ -68,12 +68,19 @@ public class LoginTests extends BaseTest {
         loginPage.clickLogin();
 
         try {
-            // The site shows same error for empty fields as invalid input
-            Assert.assertTrue(loginPage.getErrorMessage().contains("Your username is invalid!"));
-            test.log(Status.PASS, "Empty Fields Login Test Passed");
-        } catch (AssertionError e) {
-            test.log(Status.FAIL, "Empty Fields Login Test Failed");
+            if (loginPage.isErrorMessageDisplayed()) {
+                String error = loginPage.getErrorMessage();
+                Assert.assertTrue(error.contains("Your username is invalid!"));
+                test.log(Status.PASS, "Empty Fields Login Test Passed");
+            } else {
+                test.log(Status.FAIL, "No error message displayed for empty fields");
+                Assert.fail("No error message displayed");
+            }
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Exception: " + e.getMessage());
             throw e;
         }
     }
+
+
 }

@@ -33,24 +33,24 @@ pipeline {
             }
         }
 
-        stage('Run Postman Collection') {
-            steps {
-                echo '📡 Running Postman API tests using Newman...'
-                bat "dir postman"  // Debug: confirm file exists
+       stage('Run Postman Collection') {
+           steps {
+               echo '📡 Running Postman API tests using Newman...'
+               bat "dir postman"
 
-                timeout(time: 3, unit: 'MINUTES') {
-                    bat """
-                        node "D:\\node.js\\node_modules\\newman\\bin\\newman.js" ^
-                        run ${env.POSTMAN_COLLECTION} ^
-                        --insecure ^
-                        --timeout-request 10000 ^
-                        --no-color ^
-                        --reporters cli,junit ^
-                        --reporter-junit-export ${env.POSTMAN_REPORT}
-                    """
-                }
-            }
-        }
+               timeout(time: 3, unit: 'MINUTES') {
+                   bat """
+                       node "D:\\node.js\\node_modules\\newman\\bin\\newman.js" ^
+                       run ${env.POSTMAN_COLLECTION} ^
+                       --insecure ^
+                       --timeout-request 10000 ^
+                       --reporters cli,junit ^
+                       --reporter-junit-export ${env.POSTMAN_REPORT}
+                   """
+               }
+           }
+       }
+
     }
 
     post {

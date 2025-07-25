@@ -14,7 +14,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/san199r/LoginTestAutomation.git'
+                // Explicitly specify the 'main' branch for cloning
+                git branch: 'main', url: 'https://github.com/san199r/LoginTestAutomation.git'
             }
         }
 
@@ -43,6 +44,8 @@ pipeline {
     post {
         always {
             echo 'Publishing test reports...'
+            // Ensure these paths are correct relative to your workspace
+            // Spark.html might not be a standard JUnit report, verify its format
             junit 'test-output/Spark.html'
             junit "${env.POSTMAN_REPORT}"
         }

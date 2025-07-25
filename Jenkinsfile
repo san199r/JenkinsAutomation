@@ -14,7 +14,6 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Explicitly specify the 'main' branch for cloning
                 git branch: 'main', url: 'https://github.com/san199r/LoginTestAutomation.git'
             }
         }
@@ -22,7 +21,6 @@ pipeline {
         stage('Build Project') {
             steps {
                 echo 'Building project with Maven...'
-                // Changed 'sh' to 'bat' for Windows compatibility
                 bat 'mvn clean install'
             }
         }
@@ -30,7 +28,6 @@ pipeline {
         stage('Run Selenium Tests') {
             steps {
                 echo 'Running Selenium TestNG tests...'
-                // Changed 'sh' to 'bat' for Windows compatibility
                 bat 'mvn test'
             }
         }
@@ -38,8 +35,6 @@ pipeline {
         stage('Run Postman Collection') {
             steps {
                 echo 'Running Postman API tests using Newman...'
-                // Changed 'sh' to 'bat' for Windows compatibility
-                // Note: Ensure Newman is installed and available in the PATH of the Jenkins agent
                 bat "newman run ${env.POSTMAN_COLLECTION} --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
             }
         }
@@ -48,9 +43,7 @@ pipeline {
     post {
         always {
             echo 'Publishing test reports...'
-            // Ensure these paths are correct relative to your workspace
-            // Spark.html might not be a standard JUnit report, verify its format
-            junit 'test-output/Spark.html'
+            junit '**/target/surefire-reports/*.xml'
             junit "${env.POSTMAN_REPORT}"
         }
     }

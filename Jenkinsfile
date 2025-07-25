@@ -14,13 +14,14 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                echo 'Cloning GitHub repo...'
                 git branch: 'main', url: 'https://github.com/san199r/LoginTestAutomation.git'
             }
         }
 
         stage('Build Project') {
             steps {
-                echo 'Building project with Maven...'
+                echo 'Building Maven project...'
                 bat 'mvn clean install'
             }
         }
@@ -35,7 +36,10 @@ pipeline {
         stage('Run Postman Collection') {
             steps {
                 echo 'Running Postman API tests using Newman...'
-                bat "newman run ${env.POSTMAN_COLLECTION} --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
+                bat "dir postman" // Debug: list files in postman folder
+                timeout(time: 3, unit: 'MINUTES') {
+                    bat "newman run ${env.POSTMAN_COLLECTION} --insecure --no-color --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
+                }
             }
         }
     }
@@ -43,8 +47,19 @@ pipeline {
     post {
         always {
             echo 'Publishing test reports...'
+
+            // TestNG results
             junit '**/target/surefire-reports/*.xml'
+
+            // Newman results
             junit "${env.POSTMAN_REPORT}"
+
+            // If you want to view Spark.html, use publishHTML plugin
+            // publishHTML(target: [
+            //     reportDir: 'test-output',
+            //     reportFiles: 'Spark.html',
+            //     reportName: 'Selenium HTML Report'
+            // ])
         }
     }
 }

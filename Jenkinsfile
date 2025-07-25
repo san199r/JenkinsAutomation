@@ -22,21 +22,25 @@ pipeline {
         stage('Build Project') {
             steps {
                 echo 'Building project with Maven...'
-                sh 'mvn clean install'
+                // Changed 'sh' to 'bat' for Windows compatibility
+                bat 'mvn clean install'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
                 echo 'Running Selenium TestNG tests...'
-                sh 'mvn test'
+                // Changed 'sh' to 'bat' for Windows compatibility
+                bat 'mvn test'
             }
         }
 
         stage('Run Postman Collection') {
             steps {
                 echo 'Running Postman API tests using Newman...'
-                sh "newman run ${env.POSTMAN_COLLECTION} --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
+                // Changed 'sh' to 'bat' for Windows compatibility
+                // Note: Ensure Newman is installed and available in the PATH of the Jenkins agent
+                bat "newman run ${env.POSTMAN_COLLECTION} --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
             }
         }
     }

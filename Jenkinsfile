@@ -14,31 +14,40 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                echo 'Cloning GitHub repo...'
+                echo '📥 Cloning GitHub repo...'
                 git branch: 'main', url: 'https://github.com/san199r/LoginTestAutomation.git'
             }
         }
 
         stage('Build Project') {
             steps {
-                echo 'Building Maven project...'
+                echo '🔨 Building Maven project...'
                 bat 'mvn clean install'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                echo 'Running Selenium TestNG tests...'
+                echo '🧪 Running Selenium TestNG tests...'
                 bat 'mvn test'
             }
         }
 
         stage('Run Postman Collection') {
             steps {
-                echo 'Running Postman API tests using Newman...'
-                bat "dir postman" // Debug: list files in postman folder
+                echo '📡 Running Postman API tests using Newman...'
+                bat "dir postman"  // Debug: confirm file exists
+
                 timeout(time: 3, unit: 'MINUTES') {
-                    bat "newman run ${env.POSTMAN_COLLECTION} --insecure --no-color --reporters cli,junit --reporter-junit-export ${env.POSTMAN_REPORT}"
+                    bat """
+                        node "D:\\node.js\\node_modules\\newman\\bin\\newman.js" ^
+                        run ${env.POSTMAN_COLLECTION} ^
+                        --insecure ^
+                        --timeout-request 10000 ^
+                        --no-color ^
+                        --reporters cli,junit ^
+                        --reporter-junit-export ${env.POSTMAN_REPORT}
+                    """
                 }
             }
         }
@@ -46,15 +55,15 @@ pipeline {
 
     post {
         always {
-            echo 'Publishing test reports...'
+            echo '📤 Publishing test reports...'
 
-            // TestNG results
+            // Selenium TestNG JUnit results
             junit '**/target/surefire-reports/*.xml'
 
-            // Newman results
+            // Postman (Newman) results
             junit "${env.POSTMAN_REPORT}"
 
-            // If you want to view Spark.html, use publishHTML plugin
+            // Optional: Enable only if Spark.html viewing is needed
             // publishHTML(target: [
             //     reportDir: 'test-output',
             //     reportFiles: 'Spark.html',

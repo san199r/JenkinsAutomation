@@ -43,7 +43,7 @@ pipeline {
     post {
         always {
             echo 'Publishing test reports...'
-            junit 'target/surefire-reports/*.xml'
+            junit 'test-output/Spark.html'
             junit "${env.POSTMAN_REPORT}"
         }
     }

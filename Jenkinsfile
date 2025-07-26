@@ -63,12 +63,12 @@ pipeline {
             // Postman (Newman) results
             junit "${env.POSTMAN_REPORT}"
 
-            // Optional: Enable only if Spark.html viewing is needed
-            // publishHTML(target: [
-            //     reportDir: 'test-output',
-            //     reportFiles: 'Spark.html',
-            //     reportName: 'Selenium HTML Report'
-            // ])
+             Optional: Enable only if Spark.html viewing is needed
+             publishHTML(target: [
+                 reportDir: 'test-output',
+                 reportFiles: 'Spark.html',
+                 reportName: 'Selenium HTML Report'
+             ])
         }
     }
 }

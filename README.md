@@ -1,27 +1,24 @@
-# Automated Login Form Testing Using Selenium
+# Continuous Integration and Delivery with Jenkins for Automated Tests
 
-This project automates the testing of a login form on the demo website:  
-🔗 [https://the-internet.herokuapp.com/login](https://the-internet.herokuapp.com/login)
+## 📌 Project Overview
 
----
+This project demonstrates a CI/CD pipeline setup using Jenkins to automatically run Selenium-based automated tests for a login page (`https://the-internet.herokuapp.com/login`) whenever code is committed to the GitHub repository.
 
-## ✅ Project Features
+## 🚀 Tech Stack
 
-- ✔️ Test valid login with correct credentials
-- ❌ Test invalid login with incorrect credentials
-- ⚠️ Test login with empty fields
-- 📊 Data-driven testing support using CSV (optional enhancement)
-
----
-
-## 🛠️ Technologies Used
-
-- **Java**
-- **Selenium WebDriver**
-- **WebDriverManager** (for managing browser drivers)
-- **JUnit 4** (for test structure)
-- **Maven** (for dependency management)
-- **ChromeDriver**
+- Java
+- Selenium WebDriver
+- TestNG
+- Maven
+- Jenkins
+- Git & GitHub
 
 ---
 
+## 🔧 Project Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/san199r/LoginTestAutomation.git
+cd LoginTestAutomation
